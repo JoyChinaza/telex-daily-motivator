@@ -1,0 +1,29 @@
+name: Telex Daily Motivator
+
+on:
+  schedule:
+    - cron: "0 8 * * *"  # Runs daily at 08:00 UTC
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Telex Script
+        env:
+          TELEX_WEBHOOK: ${{ secrets.TELEX_WEBHOOK }}
+        run: |
+          python src/main.py
